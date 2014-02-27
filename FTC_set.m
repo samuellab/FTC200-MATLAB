@@ -12,6 +12,10 @@ function FTC_set(str, val)
             val = val*100;
             req(5) = uint8(floor(val/256));
             req(6) = uint8(mod(val,256));
+        case 'power'
+            req = uint8(hex2dec(['01';'05';'00';'03']));
+            val = val*100;
+            error('set power not implemented');
         case 'enable'
             switch val
                 case 'off' %0
