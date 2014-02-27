@@ -12,13 +12,13 @@ function val = FTC_get(str)
   switch str
       case 'power'
           req = uint8(hex2dec(['01';'03';'00';'03';'00';'00']));
-          parse = @(x) (x(5)*256+x(6))/10000;
+          parse = @(x) double(x(5)*256+x(6))/10000;
       case 'PV'
           req = uint8(hex2dec(['01';'03';'10';'00';'00';'00']));
-          parse = @(x) (x(5)*256+x(6))/100;
+          parse = @(x) double(x(5)*256+x(6))/100;
       case 'SV'
           req = uint8(hex2dec(['01';'03';'00';'00';'00';'00']));
-          parse = @(x) (x(5)*256+x(6))/100;
+          parse = @(x) double(x(5)*256+x(6))/100;
       case 'DIR'
           req = uint8(hex2dec(['01';'03';'00';'0C';'00';'00']));
           parse = @parse_dir;
