@@ -14,7 +14,7 @@ function FTC_set(str, val)
         case 'power'
             req = uint8(hex2dec(['01';'05';'00';'03']));
             val = val*100;
-            req(5:6) = fliplr(typecase(int16(val),'uint8'));
+            req(5:6) = fliplr(typecast(int16(val),'uint8'));
         case 'enable'
             switch val
                 case 'off' %0
