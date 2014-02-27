@@ -1,4 +1,5 @@
 function val = FTC_get(str)
+% val = FTC_get(str)
 % str:
 %   'power' : [double] power output duty cycle in [-1, 1]
 %   'PV' : [double] thermocouple value (Celsius)
