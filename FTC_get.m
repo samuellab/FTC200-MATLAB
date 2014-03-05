@@ -7,40 +7,42 @@ function val = FTC_get(str)
 %   'DIR': [boolean] hot/cold direction (boolean)
 %   'enable' : [string] 'off', 'power', or 'PID'
   
-  global FTC;
+    global FTC;
 
-  switch str
-      case 'power'
-          req = uint8(hex2dec(['01';'03';'00';'03';'00';'00']));
+    req = uint8(hex2dec(['01';'03';'00';'03';'00';'00']));
+
+    switch str
+        case 'power'
+          req(4) = 3; % 00 03
           parse = @(x) double(x(5)*256+x(6))/10000;
-      case 'PV'
-          req = uint8(hex2dec(['01';'03';'10';'00';'00';'00']));
+        case 'PV'
+          req(3) = 16; % 10 00
           parse = @(x) double(x(5)*256+x(6))/100;
-      case 'SV'
-          req = uint8(hex2dec(['01';'03';'00';'00';'00';'00']));
+        case 'SV'
+          req(4) = 0; %00 00
           parse = @(x) double(x(5)*256+x(6))/100;
-      case 'DIR'
-          req = uint8(hex2dec(['01';'03';'00';'0C';'00';'00']));
+        case 'DIR'
+          req(4) = 12; % 00 0C
           parse = @parse_dir;
-      case 'enable'
-          req = uint8(hex2dec(['01';'03';'00';'04';'00';'00']));
+        case 'enable'
+          req(4) = 4; % 00 04
           parse = @parse_enable;
-      otherwise
+        otherwise
           error(['Get ' str ' not implemented']);
-  end
-  
-  fwrite(FTC.serial_object, req);
-  res = fread(FTC.serial_object, 6);
-  
-  % response format should be XX XX 00 02 XX XX
-  assert(all(res(3:4) == [0; 2]), 'Unexpected response from FTC module');
-  
-  % first two bytes of response should match request
-  if ~all(req(1:2)==res(1:2))
-      error('Unexpected response from FTC module');
-  end
-  
-  val = parse(res);
+    end
+
+    fwrite(FTC.serial_object, req);
+    res = fread(FTC.serial_object, 6);
+
+    % response format should be XX XX 00 02 XX XX
+    assert(all(res(3:4) == [0; 2]), 'Unexpected response from FTC module');
+
+    % first two bytes of response should match request
+    if ~all(req(1:2)==res(1:2))
+        error('Unexpected response from FTC module');
+    end
+
+    val = parse(res);
 
 end
 

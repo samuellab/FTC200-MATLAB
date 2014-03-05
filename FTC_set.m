@@ -1,20 +1,20 @@
 function FTC_set(str, val)
 % str:
-%   'SV' : setpoint (val = temperature in C)
 %   'power' : power output duty cycle in [-1 ,1]
+%   'SV' : setpoint (val = temperature in C)
 %   'enable' : boolean enable signal for PID control
 
     global FTC;
 
     switch str
-        case 'SV'
-            req = uint8(hex2dec(['01';'05';'00';'00']));
-            val = val*100;
-            req(5:6) = fliplr(typecast(uint16(val),'uint8'));
         case 'power'
             req = uint8(hex2dec(['01';'05';'00';'03']));
             val = val*1e4;
             req(5:6) = fliplr(typecast(int16(val),'uint8'));
+        case 'SV'
+            req = uint8(hex2dec(['01';'05';'00';'00']));
+            val = val*100;
+            req(5:6) = fliplr(typecast(uint16(val),'uint8'));
         case 'enable'
             switch val
                 case 'off' %0
